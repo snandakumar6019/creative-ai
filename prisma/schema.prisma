@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String         @id
+  email        String         @unique
+  name         String?
+  avatarUrl    String?
+  role         UserRole       @default(MEMBER)
+  productPages ProductPage[]
+  competitors  Competitor[]
+  creatives    Creative[]
+  settings     UserSettings?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model ProductPage {
+  id          String       @id @default(cuid())
+  title       String
+  url         String?
+  audience    String
+  offer       String
+  status      PageStatus   @default(DRAFT)
+  ownerId     String
+  owner       User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  creatives   Creative[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Competitor {
+  id          String     @id @default(cuid())
+  name        String
+  url         String
+  category    String
+  summary     String?
+  ownerId     String
+  owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Creative {
+  id            String           @id @default(cuid())
+  title         String
+  brief         String
+  format        CreativeFormat
+  status        CreativeStatus   @default(QUEUED)
+  productPageId String?
+  productPage   ProductPage?     @relation(fields: [productPageId], references: [id], onDelete: SetNull)
+  ownerId        String
+  owner          User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  assets         GeneratedAsset[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model GeneratedAsset {
+  id          String    @id @default(cuid())
+  creativeId  String
+  creative    Creative  @relation(fields: [creativeId], references: [id], onDelete: Cascade)
+  storagePath String
+  mimeType    String
+  width       Int?
+  height      Int?
+  createdAt   DateTime  @default(now())
+}
+
+model UserSettings {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  defaultTone    String   @default("direct")
+  defaultChannel String   @default("paid-social")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum PageStatus {
+  DRAFT
+  LIVE
+  ARCHIVED
+}
+
+enum CreativeFormat {
+  IMAGE
+  VIDEO
+  COPY
+}
+
+enum CreativeStatus {
+  QUEUED
+  GENERATING
+  READY
+  FAILED
+}
