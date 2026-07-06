@@ -202,6 +202,7 @@ export default function CompetitorsPage() {
     searchFacebookAdLibraryAction,
     initialFacebookAdLibraryState
   );
+  const facebookCreatives = facebookState?.creatives ?? [];
 
   const filteredCreatives = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -317,13 +318,13 @@ export default function CompetitorsPage() {
 
           {facebookState.status === "success" && (
             <div className="mt-4 rounded-lg border border-primary/25 bg-primary/10 px-4 py-3 text-sm text-primary">
-              Retrieved {facebookState.creatives.length} Meta creatives for “{facebookState.query}”.
+              Retrieved {facebookCreatives.length} Meta creatives for “{facebookState.query}”.
             </div>
           )}
         </CardContent>
       </Card>
 
-      {facebookState.creatives.length > 0 && (
+      {facebookCreatives.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -332,10 +333,10 @@ export default function CompetitorsPage() {
                 Image and video creative records normalized from Meta.
               </p>
             </div>
-            <Badge variant="outline">{facebookState.creatives.length} live results</Badge>
+            <Badge variant="outline">{facebookCreatives.length} live results</Badge>
           </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {facebookState.creatives.map((creative) => (
+            {facebookCreatives.map((creative) => (
               <FacebookCreativeCard
                 key={creative.id}
                 creative={creative}
