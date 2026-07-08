@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 
-import { signIn, signUp } from "@/app/actions/auth";
+import { signIn, signInWithGoogle, signUp } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -22,10 +22,20 @@ export function AuthForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <form>
+          <Button className="w-full" formAction={signInWithGoogle} type="submit" variant="outline">
+            Continue with Google
+          </Button>
+        </form>
+        <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="h-px flex-1 bg-border" />
+          <span>@goingmerry.xyz only</span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
         <form className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" placeholder="you@company.com" required />
+            <Input id="email" name="email" type="email" placeholder="you@goingmerry.xyz" required />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>

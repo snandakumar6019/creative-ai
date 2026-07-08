@@ -1,7 +1,18 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient, type SetAllCookies } from "@supabase/ssr";
 
+import { isAllowedEmail, unauthorizedDomainMessage } from "@/lib/auth/access";
 import { getSupabaseConfig } from "@/lib/env";
+
+function redirectWithCookies(url: URL, response: NextResponse) {
+  const redirectResponse = NextResponse.redirect(url);
+
+  response.cookies.getAll().forEach(({ name, value, ...options }) => {
+    redirectResponse.cookies.set(name, value, options);
+  });
+
+  return redirectResponse;
+}
 
 export async function updateSession(request: NextRequest) {
   const config = getSupabaseConfig();
@@ -34,6 +45,19 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
+  }
+
+  if (user && !isAllowedEmail(user.email) && request.nextUrl.pathname.startsWith("/dashboard")) {
+    await supabase.auth.signOut();
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.search = `?error=${encodeURIComponent(unauthorizedDomainMessage())}`;
+    return redirectWithCookies(url, response);
+  }
+
+  if (user && !isAllowedEmail(user.email) && request.nextUrl.pathname === "/login") {
+    await supabase.auth.signOut();
+    return response;
   }
 
   if (user && request.nextUrl.pathname === "/login") {
