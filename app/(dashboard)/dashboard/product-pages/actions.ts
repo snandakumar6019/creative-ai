@@ -129,17 +129,21 @@ export async function createProduct(formData: FormData) {
   }
 
   const { supabase, userId } = await getAuthenticatedSupabase();
-  const { error } = await supabase.from("products").insert({
-    ...result.values,
-    owner_id: userId
-  });
+  const { data, error } = await supabase
+    .from("products")
+    .insert({
+      ...result.values,
+      owner_id: userId
+    })
+    .select("id")
+    .single();
 
-  if (error) {
-    redirect(productPagesUrl({ error: error.message }));
+  if (error || !data) {
+    redirect(productPagesUrl({ error: error?.message ?? "Product could not be created." }));
   }
 
   revalidatePath(PRODUCT_PAGE_PATH);
-  redirect(productPagesUrl({ message: "Product created." }));
+  redirect(`/dashboard/product-pages/${data.id}?message=Product%20workspace%20created.`);
 }
 
 export async function updateProduct(formData: FormData) {

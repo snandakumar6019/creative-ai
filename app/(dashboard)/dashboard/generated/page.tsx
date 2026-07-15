@@ -171,12 +171,12 @@ export default async function GeneratedCreativesPage({
     <div className="space-y-6">
       <PageHeader
         title="Generated Creatives"
-        description="Save, manage, export, and reuse generated creative output stored in Supabase."
+        description="Review saved output across products. New creative starts inside a product workspace."
         action={
           <Button asChild>
-            <Link href="/dashboard/generator">
+            <Link href="/dashboard/product-pages">
               <WandSparkles className="mr-2 size-4" />
-              Open generator
+              Choose product
             </Link>
           </Button>
         }
@@ -342,7 +342,7 @@ export default async function GeneratedCreativesPage({
                 </div>
                 <h3 className="mt-4 text-lg font-semibold">No generated creatives saved yet</h3>
                 <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-                  Save a generated creative here or from the Creative Generator to start building
+                  Save a generated creative here or from a product workspace to start building
                   your library.
                 </p>
               </CardContent>

@@ -3,12 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  FileText,
+  Boxes,
   ImageIcon,
   LayoutDashboard,
-  Library,
-  Settings,
-  WandSparkles
+  Settings
 } from "lucide-react";
 
 import { Logo } from "@/components/ui/logo";
@@ -16,10 +14,8 @@ import { cn } from "@/lib/utils";
 
 export const dashboardNavItems = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { title: "Product Pages", href: "/dashboard/product-pages", icon: FileText },
-  { title: "Competitor Library", href: "/dashboard/competitors", icon: Library },
-  { title: "Creative Generator", href: "/dashboard/generator", icon: WandSparkles },
-  { title: "Generated Creatives", href: "/dashboard/generated", icon: ImageIcon },
+  { title: "Products", href: "/dashboard/product-pages", icon: Boxes },
+  { title: "All Creative History", href: "/dashboard/generated", icon: ImageIcon },
   { title: "Settings", href: "/dashboard/settings", icon: Settings }
 ];
 
@@ -66,9 +62,9 @@ export function SidebarContent({
         })}
       </nav>
       <div className="mt-auto rounded-lg border border-white/10 bg-white/[0.06] p-4">
-        <p className="text-sm font-medium">Creative queue</p>
+        <p className="text-sm font-medium">Product workspaces</p>
         <p className="mt-2 text-sm text-sidebar-foreground/60">
-          19 briefs prepared for generation.
+          Open a product to generate, browse competitors, and review its history.
         </p>
       </div>
     </div>

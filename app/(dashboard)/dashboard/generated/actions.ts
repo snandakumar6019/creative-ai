@@ -23,8 +23,28 @@ const saveCreativeSchema = z.object({
   assetUrl: z.string().trim().max(500).default("/creative-ai-preview.png")
 });
 
-function generatedUrl(params: { error?: string; message?: string }) {
+function safeReturnPath(value: string) {
+  if (
+    value.startsWith("/dashboard/product-pages/") &&
+    !value.startsWith("//") &&
+    !value.includes("://")
+  ) {
+    return value;
+  }
+
+  return GENERATED_PATH;
+}
+
+function generatedUrl(
+  params: { error?: string; message?: string },
+  returnTo = GENERATED_PATH
+) {
+  const [pathname, existingQuery = ""] = safeReturnPath(returnTo).split("?");
   const searchParams = new URLSearchParams();
+
+  for (const [key, value] of new URLSearchParams(existingQuery)) {
+    searchParams.set(key, value);
+  }
 
   if (params.error) {
     searchParams.set("error", params.error);
@@ -35,7 +55,7 @@ function generatedUrl(params: { error?: string; message?: string }) {
   }
 
   const query = searchParams.toString();
-  return query ? `${GENERATED_PATH}?${query}` : GENERATED_PATH;
+  return query ? `${pathname}?${query}` : pathname;
 }
 
 function readString(formData: FormData, key: string) {
@@ -88,6 +108,7 @@ async function getAuthenticatedSupabase() {
 }
 
 export async function saveGeneratedCreative(formData: FormData) {
+  const returnTo = safeReturnPath(readString(formData, "returnTo"));
   const parsed = saveCreativeSchema.safeParse({
     productRef: readString(formData, "productRef"),
     productId: readString(formData, "productId"),
@@ -104,7 +125,7 @@ export async function saveGeneratedCreative(formData: FormData) {
   });
 
   if (!parsed.success) {
-    redirect(generatedUrl({ error: parsed.error.issues[0]?.message ?? "Check the creative details." }));
+    redirect(generatedUrl({ error: parsed.error.issues[0]?.message ?? "Check the creative details." }, returnTo));
   }
 
   const generationDate = parseGenerationDate(parsed.data.generationDate);
@@ -113,11 +134,11 @@ export async function saveGeneratedCreative(formData: FormData) {
   const productName = productRef?.name ?? parsed.data.productName;
 
   if (!generationDate) {
-    redirect(generatedUrl({ error: "Generation date must be valid." }));
+    redirect(generatedUrl({ error: "Generation date must be valid." }, returnTo));
   }
 
   if (!productName) {
-    redirect(generatedUrl({ error: "Product is required." }));
+    redirect(generatedUrl({ error: "Product is required." }, returnTo));
   }
 
   const { supabase, userId } = await getAuthenticatedSupabase();
@@ -137,11 +158,12 @@ export async function saveGeneratedCreative(formData: FormData) {
   });
 
   if (error) {
-    redirect(generatedUrl({ error: error.message }));
+    redirect(generatedUrl({ error: error.message }, returnTo));
   }
 
   revalidatePath(GENERATED_PATH);
-  redirect(generatedUrl({ message: "Generated creative saved." }));
+  revalidatePath(returnTo.split("?")[0]);
+  redirect(generatedUrl({ message: "Generated creative saved." }, returnTo));
 }
 
 export async function renameGeneratedCreative(formData: FormData) {

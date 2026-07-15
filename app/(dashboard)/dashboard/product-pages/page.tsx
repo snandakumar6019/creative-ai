@@ -122,8 +122,8 @@ export default async function ProductPagesPage({
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Product Pages"
-        description="Manage product and brand context for creative generation."
+        title="Products"
+        description="Each product is a self-contained workspace for context, competitors, generation, assets, and creative history."
         action={
           <Button asChild variant="outline">
             <Link href="#new-product">
@@ -172,7 +172,7 @@ export default async function ProductPagesPage({
         <section className="space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold tracking-normal">Product library</h2>
+              <h2 className="text-lg font-semibold tracking-normal">Your product workspaces</h2>
               <p className="text-sm text-muted-foreground">
                 {products.length} {products.length === 1 ? "product" : "products"} stored in
                 Supabase
@@ -322,7 +322,7 @@ function ProductCard({ product }: { product: Product }) {
             <Button asChild variant="outline" size="sm">
               <Link href={`/dashboard/product-pages/${product.id}`}>
                 <Layers3 className="mr-2 size-4" />
-                Details
+                Open workspace
               </Link>
             </Button>
             {product.website && (

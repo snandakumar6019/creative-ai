@@ -7,9 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { LandingHeader } from "@/components/landing/landing-header";
 
 const metrics = [
-  { label: "Active products", value: "42" },
-  { label: "Competitors tracked", value: "128" },
-  { label: "Creatives shipped", value: "3.4k" }
+  { label: "Product workspaces", value: "42" },
+  { label: "Competitor pages", value: "128" },
+  { label: "Creatives saved", value: "3.4k" }
 ];
 
 export default function LandingPage() {
@@ -25,8 +25,8 @@ export default function LandingPage() {
             Creative AI
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-            Plan product pages, monitor competitors, generate campaign concepts,
-            and review every creative asset from one focused dashboard.
+            Give every product its own creative workspace—with persistent brand context,
+            competitor pages, generation tools, assets, and creative history.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
@@ -67,18 +67,18 @@ export default function LandingPage() {
           {[
             {
               icon: Layers3,
-              title: "Structured product context",
-              body: "Keep page angles, offers, claims, and proof points ready for every campaign."
+              title: "One workspace per product",
+              body: "Keep positioning, audience, brand guidelines, and assets ready for every campaign."
             },
             {
               icon: BarChart3,
-              title: "Competitive intelligence",
-              body: "Collect patterns from market leaders and turn them into practical creative direction."
+              title: "Persistent competitor pages",
+              body: "Attach multiple Meta Ad Library pages to the product that actually uses them."
             },
             {
               icon: Sparkles,
-              title: "Generation-ready workflows",
-              body: "Queue creative briefs now, then connect the OpenAI implementation when it is time."
+              title: "Context-aware generation",
+              body: "Generate and save new directions without rebuilding product or competitor context."
             }
           ].map((item) => (
             <div key={item.title} className="rounded-lg border bg-card p-5">

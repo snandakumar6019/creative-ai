@@ -11,13 +11,13 @@ export function LandingHeader() {
         <Logo />
         <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
           <Link className="transition-colors hover:text-foreground" href="/dashboard/product-pages">
-            Product Pages
+            Products
           </Link>
-          <Link className="transition-colors hover:text-foreground" href="/dashboard/competitors">
-            Competitors
+          <Link className="transition-colors hover:text-foreground" href="/dashboard/generated">
+            Creative History
           </Link>
-          <Link className="transition-colors hover:text-foreground" href="/dashboard/generator">
-            Generator
+          <Link className="transition-colors hover:text-foreground" href="/dashboard">
+            Dashboard
           </Link>
         </nav>
         <div className="flex items-center gap-2">
