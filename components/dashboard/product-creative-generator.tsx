@@ -7,7 +7,7 @@ import { useFormStatus } from "react-dom";
 import { saveGeneratedCreative } from "@/app/(dashboard)/dashboard/generated/actions";
 import {
   generateCreativeAction,
-  initialCreativeGeneratorState
+  type CreativeGeneratorState
 } from "@/app/(dashboard)/dashboard/generator/actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,10 @@ type CompetitorContext = {
   name: string;
   facebook_ad_library_url: string;
   notes: string;
+};
+
+const initialCreativeGeneratorState: CreativeGeneratorState = {
+  status: "idle"
 };
 
 function competitorPrompt(competitor: CompetitorContext | undefined) {

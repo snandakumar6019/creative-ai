@@ -8,10 +8,6 @@ export type CreativeGeneratorState = {
   error?: string;
 };
 
-export const initialCreativeGeneratorState: CreativeGeneratorState = {
-  status: "idle"
-};
-
 function readString(formData: FormData, key: string) {
   return String(formData.get(key) ?? "");
 }
